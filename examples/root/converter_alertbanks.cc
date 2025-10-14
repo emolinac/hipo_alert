@@ -174,12 +174,12 @@ void convert(const char *hipoFile, bool do_mc){
    writer.getDictionary().addSchema(factory.getSchema("REC::Particle"));
    writer.open(outputFileHipo);
 
-   hipo::bank  hits(factory.getSchema("AHDC::Hits"));
-   hipo::bank  preclusters(factory.getSchema("AHDC::PreClusters"));
-   hipo::bank  clusters(factory.getSchema("AHDC::Clusters"));
-   hipo::bank  mctracks(factory.getSchema("MC::Particle"));
-   hipo::bank  tracks(factory.getSchema("AHDC::Track"));
-   hipo::bank  kftracks(factory.getSchema("AHDC::KFTrack"));
+   hipo::bank  hits(factory.getSchema("AHDC::hits"));
+   hipo::bank  preclusters(factory.getSchema("AHDC::preclusters"));
+   hipo::bank  clusters(factory.getSchema("AHDC::clusters"));
+   hipo::bank  mctracks(factory.getSchema("MC::particle"));
+   hipo::bank  tracks(factory.getSchema("AHDC::track"));
+   hipo::bank  kftracks(factory.getSchema("AHDC::kftrack"));
 
    hipo::event      event;
 
