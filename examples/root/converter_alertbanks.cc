@@ -30,6 +30,7 @@
 #define maxtracks        100
 #define maxkftracks      100
 #define maxahdcadc       500 // TODO: check this eventually!
+#define maxrectracks    1000
 
 
 void    convert(const char *hipoFile, bool do_mc);
@@ -42,8 +43,8 @@ int main(int argc, char **argv)
 		  << __cplusplus << std::endl;
 
 	char inputFile[512];
-	char outputFile[512];
-	char outputFileHipo[512];
+	// char outputFile[512];
+	// char outputFileHipo[512];
 	bool do_mc = false;
 
 	if (argc > 2)
@@ -51,8 +52,8 @@ int main(int argc, char **argv)
 
 	if (argc > 1) {
 		sprintf(inputFile, "%s", argv[1]);
-		sprintf(outputFile, "%s.root", argv[1]);
-		sprintf(outputFileHipo, "%s_writer.hipo", argv[1]);
+		// sprintf(outputFile, "%s.root", argv[1]);
+		// sprintf(outputFileHipo, "%s_writer.hipo", argv[1]);
 		// sprintf(outputFile,"%s",argv[2]);
 	} else {
 		std::cout << " *** please provide a file name (and an optional flag to add MC)..." << std::endl;
@@ -118,26 +119,26 @@ void convert(const char *hipoFile, bool do_mc)
 	treeOutput->Branch("clusterY", &clusterY, "clusterY[nclusters]/F", 512000);
 	treeOutput->Branch("clusterZ", &clusterZ, "clusterZ[nclusters]/F", 512000);
 
-	/* MC tracks */
-	int nmctracks;
-	int mctrackpid[maxmctracks];
-	float mctrackpx[maxmctracks];
-	float mctrackpy[maxmctracks];
-	float mctrackpz[maxmctracks];
-	float mctrackvx[maxmctracks];
-	float mctrackvy[maxmctracks];
-	float mctrackvz[maxmctracks];
-	float mctrackvt[maxmctracks];
-	if (do_mc) {
-		treeOutput->Branch("nmctracks", &nmctracks, "nmctracks/I", 512000);
-		treeOutput->Branch("mctrackpx", &mctrackpx, "mctrackpx[nmctracks]/F", 512000);
-		treeOutput->Branch("mctrackpy", &mctrackpy, "mctrackpy[nmctracks]/F", 512000);
-		treeOutput->Branch("mctrackpz", &mctrackpz, "mctrackpz[nmctracks]/F", 512000);
-		treeOutput->Branch("mctrackvx", &mctrackvx, "mctrackvx[nmctracks]/F", 512000);
-		treeOutput->Branch("mctrackvy", &mctrackvy, "mctrackvy[nmctracks]/F", 512000);
-		treeOutput->Branch("mctrackvz", &mctrackvz, "mctrackvz[nmctracks]/F", 512000);
-		treeOutput->Branch("mctrackvt", &mctrackvt, "mctrackvt[nmctracks]/F", 512000);
-	}
+	// /* MC tracks */
+	// int nmctracks;
+	// int mctrackpid[maxmctracks];
+	// float mctrackpx[maxmctracks];
+	// float mctrackpy[maxmctracks];
+	// float mctrackpz[maxmctracks];
+	// float mctrackvx[maxmctracks];
+	// float mctrackvy[maxmctracks];
+	// float mctrackvz[maxmctracks];
+	// float mctrackvt[maxmctracks];
+	// if (do_mc) {
+	// 	treeOutput->Branch("nmctracks", &nmctracks, "nmctracks/I", 512000);
+	// 	treeOutput->Branch("mctrackpx", &mctrackpx, "mctrackpx[nmctracks]/F", 512000);
+	// 	treeOutput->Branch("mctrackpy", &mctrackpy, "mctrackpy[nmctracks]/F", 512000);
+	// 	treeOutput->Branch("mctrackpz", &mctrackpz, "mctrackpz[nmctracks]/F", 512000);
+	// 	treeOutput->Branch("mctrackvx", &mctrackvx, "mctrackvx[nmctracks]/F", 512000);
+	// 	treeOutput->Branch("mctrackvy", &mctrackvy, "mctrackvy[nmctracks]/F", 512000);
+	// 	treeOutput->Branch("mctrackvz", &mctrackvz, "mctrackvz[nmctracks]/F", 512000);
+	// 	treeOutput->Branch("mctrackvt", &mctrackvt, "mctrackvt[nmctracks]/F", 512000);
+	// }
 
 	/* AHDC tracks */
 	int ntracks;
@@ -148,33 +149,39 @@ void convert(const char *hipoFile, bool do_mc)
 	float trackpy[maxtracks];
 	float trackpz[maxtracks];
 
-	treeOutput->Branch("ntracks", &ntracks, "ntracks/I", 512000);
-	treeOutput->Branch("trackx", &trackx, "trackx[ntracks]/F", 512000);
-	treeOutput->Branch("tracky", &tracky, "tracky[ntracks]/F", 512000);
-	treeOutput->Branch("trackz", &trackz, "trackz[ntracks]/F", 512000);
-	treeOutput->Branch("trackpx", &trackpx, "trackpx[ntracks]/F", 512000);
-	treeOutput->Branch("trackpy", &trackpy, "trackpy[ntracks]/F", 512000);
-	treeOutput->Branch("trackpz", &trackpz, "trackpz[ntracks]/F", 512000);
+	treeOutput->Branch("ahdc_ntracks", &ntracks, "ntracks/I",          512000); 
+	treeOutput->Branch("ahdc_trackx",  &trackx,  "trackx[ntracks]/F",  512000);
+	treeOutput->Branch("ahdc_tracky",  &tracky,  "tracky[ntracks]/F",  512000);
+	treeOutput->Branch("ahdc_trackz",  &trackz,  "trackz[ntracks]/F",  512000);
+	treeOutput->Branch("ahdc_trackpx", &trackpx, "trackpx[ntracks]/F", 512000);
+	treeOutput->Branch("ahdc_trackpy", &trackpy, "trackpy[ntracks]/F", 512000);
+	treeOutput->Branch("ahdc_trackpz", &trackpz, "trackpz[ntracks]/F", 512000);
 
 	/* AHDC KF tracks */
 	int nkftracks;
+	int kftrack_id[maxkftracks];
 	float kftrackx[maxkftracks];
 	float kftracky[maxkftracks];
 	float kftrackz[maxkftracks];
 	float kftrackpx[maxkftracks];
 	float kftrackpy[maxkftracks];
 	float kftrackpz[maxkftracks];
+	float kftrackpath[maxkftracks];
+	float kftrackdedx[maxkftracks];
 
-	treeOutput->Branch("nkftracks", &nkftracks, "nkftracks/I", 512000);
-	treeOutput->Branch("kftrackx", &kftrackx, "kftrackx[nkftracks]/F", 512000);
-	treeOutput->Branch("kftracky", &kftracky, "kftracky[nkftracks]/F", 512000);
-	treeOutput->Branch("kftrackz", &kftrackz, "kftrackz[nkftracks]/F", 512000);
-	treeOutput->Branch("kftrackpx", &kftrackpx, "kftrackpx[nkftracks]/F", 512000);
-	treeOutput->Branch("kftrackpy", &kftrackpy, "kftrackpy[nkftracks]/F", 512000);
-	treeOutput->Branch("kftrackpz", &kftrackpz, "kftrackpz[nkftracks]/F", 512000);
+	treeOutput->Branch("ahdc_nkftracks",   &nkftracks,   "nkftracks/I", 		  512000);
+	treeOutput->Branch("ahdc_kftrack_id",  &kftrack_id,  "kftrack_id[nkftracks]/I",   512000);
+	treeOutput->Branch("ahdc_kftrackx",    &kftrackx,    "kftrackx[nkftracks]/F",     512000);
+	treeOutput->Branch("ahdc_kftracky",    &kftracky,    "kftracky[nkftracks]/F",     512000);
+	treeOutput->Branch("ahdc_kftrackz",    &kftrackz,    "kftrackz[nkftracks]/F",     512000);
+	treeOutput->Branch("ahdc_kftrackpx",   &kftrackpx,   "kftrackpx[nkftracks]/F",    512000);
+	treeOutput->Branch("ahdc_kftrackpy",   &kftrackpy,   "kftrackpy[nkftracks]/F",    512000);
+	treeOutput->Branch("ahdc_kftrackpz",   &kftrackpz,   "kftrackpz[nkftracks]/F",    512000);
+	treeOutput->Branch("ahdc_kftrackpath", &kftrackpath, "kftrackpath[nkftracks]/F",  512000);
+	treeOutput->Branch("ahdc_kftrackdedx", &kftrackdedx, "kftrackdedx[nkftracks]/F",  512000);
 
 	/* AHDC ADC information */
-	int n_ahdcrows;
+	int   n_ahdcrows;
 	int   AHDC_sector[maxahdcadc];
 	int   AHDC_component[maxahdcadc];
 	int   AHDC_order[maxahdcadc];
@@ -182,13 +189,42 @@ void convert(const char *hipoFile, bool do_mc)
 	float AHDC_leadingEdgeTime[maxahdcadc];
 	float AHDC_timeOverThreshold[maxahdcadc];
 
-	treeOutput->Branch("n_ahdcrows", &n_ahdcrows, "n_ahdcrows/I", 512000);
-	treeOutput->Branch("AHDC_sector", &AHDC_sector, "AHDC_sector[n_ahdcrows]/I", 512000);
-	treeOutput->Branch("AHDC_component", &AHDC_component, "AHDC_component[n_ahdcrows]/I", 512000);
-	treeOutput->Branch("AHDC_order", &AHDC_order, "AHDC_order[n_ahdcrows]/I", 512000);
-	treeOutput->Branch("AHDC_maxADC", &AHDC_maxADC, "AHDC_maxADC[n_ahdcrows]/I", 512000);
-	treeOutput->Branch("AHDC_leadingEdgeTime", &AHDC_leadingEdgeTime, "AHDC_leadingEdgeTime[n_ahdcrows]/F", 512000);
-	treeOutput->Branch("AHDC_timeOverThreshold", &AHDC_timeOverThreshold, "AHDC_timeOverThreshold[n_ahdcrows]/F", 512000);
+	treeOutput->Branch("ahdc_nadcrows",          &n_ahdcrows,             "n_ahdcrows/I", 			       512000);
+	treeOutput->Branch("ahdc_sector",            &AHDC_sector,            "AHDC_sector[n_ahdcrows]/I",             512000);
+	treeOutput->Branch("ahdc_component",         &AHDC_component,         "AHDC_component[n_ahdcrows]/I",          512000);
+	treeOutput->Branch("ahdc_order",             &AHDC_order,             "AHDC_order[n_ahdcrows]/I",              512000);
+	treeOutput->Branch("ahdc_maxADC",            &AHDC_maxADC,            "AHDC_maxADC[n_ahdcrows]/I",             512000);
+	treeOutput->Branch("ahdc_leadingEdgeTime",   &AHDC_leadingEdgeTime,   "AHDC_leadingEdgeTime[n_ahdcrows]/F",    512000);
+	treeOutput->Branch("ahdc_timeOverThreshold", &AHDC_timeOverThreshold, "AHDC_timeOverThreshold[n_ahdcrows]/F",  512000);
+
+	// Particle banks
+	int   nrectracks;
+	int   rec_track_pid[maxrectracks];
+	float rec_track_x[maxrectracks];
+	float rec_track_y[maxrectracks];
+	float rec_track_z[maxrectracks];
+	float rec_track_vt[maxrectracks];
+	float rec_track_px[maxrectracks];
+	float rec_track_py[maxrectracks];
+	float rec_track_pz[maxrectracks];
+	float rec_track_beta[maxrectracks];
+	float rec_track_chi2pid[maxrectracks];
+	int   rec_track_status[maxrectracks];
+	int   rec_track_charge[maxrectracks];
+
+	treeOutput->Branch("nrectracks",        &nrectracks,        "nrectracks/I",                    512000);
+	treeOutput->Branch("rec_track_pid",     &rec_track_pid,     "rec_track_pid[nrectracks]/I",     512000);
+	treeOutput->Branch("rec_track_x",       &rec_track_x,       "rec_track_x[nrectracks]/F",       512000);
+	treeOutput->Branch("rec_track_y",       &rec_track_y,       "rec_track_y[nrectracks]/F",       512000);
+	treeOutput->Branch("rec_track_z",       &rec_track_z,       "rec_track_z[nrectracks]/F",       512000);
+	treeOutput->Branch("rec_track_vt",      &rec_track_vt,      "rec_track_vt[nrectracks]/F",      512000);
+	treeOutput->Branch("rec_track_px",      &rec_track_px,      "rec_track_px[nrectracks]/F",      512000);
+	treeOutput->Branch("rec_track_py",      &rec_track_py,      "rec_track_py[nrectracks]/F",      512000);
+	treeOutput->Branch("rec_track_pz",      &rec_track_pz,      "rec_track_pz[nrectracks]/F",      512000);
+	treeOutput->Branch("rec_track_beta",    &rec_track_beta,    "rec_track_beta[nrectracks]/F",    512000);
+	treeOutput->Branch("rec_track_chi2pid", &rec_track_chi2pid, "rec_track_chi2pid[nrectracks]/F", 512000);
+	treeOutput->Branch("rec_track_status",  &rec_track_status,  "rec_track_status[nrectracks]/I",  512000);
+	treeOutput->Branch("rec_track_charge",  &rec_track_charge,  "rec_track_charge[nrectracks]/I",  512000);
 
 	int nEv = 0;
 	long runtime = 0;
@@ -200,16 +236,17 @@ void convert(const char *hipoFile, bool do_mc)
 	factory.show();
 
 	hipo::writer writer;
-	writer.getDictionary().addSchema(factory.getSchema("REC::Particle"));
+	writer.getDictionary().addSchema(factory.getSchema("REC::Particle")); // EFMC: Could this be an issue ????
 	writer.open(outputFileHipo);
 
 	hipo::bank hits(factory.getSchema("AHDC::hits"));
 	hipo::bank preclusters(factory.getSchema("AHDC::preclusters"));
 	hipo::bank clusters(factory.getSchema("AHDC::clusters"));
-	hipo::bank mctracks(factory.getSchema("MC::Particle"));
+	// hipo::bank mctracks(factory.getSchema("MC::Particle"));
 	hipo::bank tracks(factory.getSchema("AHDC::track"));
 	hipo::bank kftracks(factory.getSchema("AHDC::kftrack"));
 	hipo::bank ahdc_adc(factory.getSchema("AHDC::adc"));
+	hipo::bank rec_tracks(factory.getSchema("REC::Particle"));
 
 	hipo::event event;
 	int counter = 0;
@@ -220,17 +257,20 @@ void convert(const char *hipoFile, bool do_mc)
 	hipo::benchmark restBenchmark;
 	hipo::benchmark writerHipoBenchmark;
 
+
+
 	while (reader.next() == true) {
 		readerBenchmark.resume();
 		reader.read(event);
 		event.getStructure(hits);
 		event.getStructure(preclusters);
 		event.getStructure(clusters);
-		if (do_mc)
-			event.getStructure(mctracks);
+		// if (do_mc)
+		// 	event.getStructure(mctracks);
 		event.getStructure(tracks);
 		event.getStructure(kftracks);
 		event.getStructure(ahdc_adc);
+		event.getStructure(rec_tracks);
 
 		readerBenchmark.pause();
 
@@ -258,20 +298,20 @@ void convert(const char *hipoFile, bool do_mc)
 			clusterZ[i] = clusters.getFloat("z", i);
 		}
 
-		if (do_mc) {
-			nmctracks = mctracks.getRows();
-			assert(nmctracks < maxmctracks);
-			for (int i = 0; i < nhits; i++) {
-				mctrackpid[i] = mctracks.getInt("pid", i);
-				mctrackpx[i] = mctracks.getFloat("px", i);
-				mctrackpy[i] = mctracks.getFloat("py", i);
-				mctrackpz[i] = mctracks.getFloat("pz", i);
-				mctrackvx[i] = mctracks.getFloat("vx", i);
-				mctrackvy[i] = mctracks.getFloat("vy", i);
-				mctrackvz[i] = mctracks.getFloat("vz", i);
-				mctrackvt[i] = mctracks.getFloat("vt", i);
-			}
-		}
+		// if (do_mc) {
+		// 	nmctracks = mctracks.getRows();
+		// 	assert(nmctracks < maxmctracks);
+		// 	for (int i = 0; i < nhits; i++) {
+		// 		mctrackpid[i] = mctracks.getInt("pid", i);
+		// 		mctrackpx[i] = mctracks.getFloat("px", i);
+		// 		mctrackpy[i] = mctracks.getFloat("py", i);
+		// 		mctrackpz[i] = mctracks.getFloat("pz", i);
+		// 		mctrackvx[i] = mctracks.getFloat("vx", i);
+		// 		mctrackvy[i] = mctracks.getFloat("vy", i);
+		// 		mctrackvz[i] = mctracks.getFloat("vz", i);
+		// 		mctrackvt[i] = mctracks.getFloat("vt", i);
+		// 	}
+		// }
 
 		ntracks = tracks.getRows();
 		assert(ntracks < maxtracks);
@@ -284,26 +324,35 @@ void convert(const char *hipoFile, bool do_mc)
 			trackpz[i] = tracks.getFloat("pz", i);
 		}
 
-		nkftracks = kftracks.getRows();
-		assert(nkftracks < maxkftracks);
-		for (int i = 0; i < nhits; i++) {
-			kftrackx[i] = kftracks.getFloat("x", i);
-			kftracky[i] = kftracks.getFloat("y", i);
-			kftrackz[i] = kftracks.getFloat("z", i);
-			kftrackpx[i] = kftracks.getFloat("px", i);
-			kftrackpy[i] = kftracks.getFloat("py", i);
-			kftrackpz[i] = kftracks.getFloat("pz", i);
+		nrectracks = rec_tracks.getRows();
+		assert(nrectracks < maxrectracks);
+		for (int i = 0; i < nrectracks; i++) {
+			rec_track_pid[i]     = rec_tracks.getInt("pid", i);
+			rec_track_x[i]       = rec_tracks.getFloat("vx", i);
+			rec_track_y[i]       = rec_tracks.getFloat("vy", i);
+			rec_track_z[i]       = rec_tracks.getFloat("vz", i);
+			rec_track_vt[i]      = rec_tracks.getFloat("vt", i);
+			rec_track_px[i]      = rec_tracks.getFloat("px", i);
+			rec_track_py[i]      = rec_tracks.getFloat("py", i);
+			rec_track_pz[i]      = rec_tracks.getFloat("pz", i);
+			rec_track_beta[i]    = rec_tracks.getFloat("beta", i);
+			rec_track_chi2pid[i] = rec_tracks.getFloat("chi2pid", i);
+			rec_track_status[i]  = rec_tracks.getInt("status", i);
+			rec_track_charge[i]  = rec_tracks.getInt("charge", i);
 		}
 
 		nkftracks = kftracks.getRows();
 		assert(nkftracks < maxkftracks);
 		for (int i = 0; i < nhits; i++) {
-			kftrackx[i] = kftracks.getFloat("x", i);
-			kftracky[i] = kftracks.getFloat("y", i);
-			kftrackz[i] = kftracks.getFloat("z", i);
-			kftrackpx[i] = kftracks.getFloat("px", i);
-			kftrackpy[i] = kftracks.getFloat("py", i);
-			kftrackpz[i] = kftracks.getFloat("pz", i);
+			kftrack_id[i] = kftracks.getInt("trackid", i);
+			kftrackx[i]   = kftracks.getFloat("x", i);
+			kftracky[i]   = kftracks.getFloat("y", i);
+			kftrackz[i]   = kftracks.getFloat("z", i);
+			kftrackpx[i]  = kftracks.getFloat("px", i);
+			kftrackpy[i]  = kftracks.getFloat("py", i);
+			kftrackpz[i]  = kftracks.getFloat("pz", i);
+			kftrackpath[i]= kftracks.getFloat("path", i);
+			kftrackdedx[i]= kftracks.getFloat("dEdx", i);
 		}
 
 		n_ahdcrows = ahdc_adc.getRows();
