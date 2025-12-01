@@ -129,6 +129,7 @@ void convert(const char *hipoFile, bool do_mc)
 	float trackpx[maxtracks];
 	float trackpy[maxtracks];
 	float trackpz[maxtracks];
+	int   trackid[maxtracks];
 
 	treeOutput->Branch("ahdc_ntracks", &ntracks, "ntracks/I",          512000); 
 	treeOutput->Branch("ahdc_track_x",  &trackx,  "trackx[ntracks]/F",  512000);
@@ -137,6 +138,7 @@ void convert(const char *hipoFile, bool do_mc)
 	treeOutput->Branch("ahdc_track_px", &trackpx, "trackpx[ntracks]/F", 512000);
 	treeOutput->Branch("ahdc_track_py", &trackpy, "trackpy[ntracks]/F", 512000);
 	treeOutput->Branch("ahdc_track_pz", &trackpz, "trackpz[ntracks]/F", 512000);
+	treeOutput->Branch("ahdc_track_id", &trackid, "trackid[ntracks]/I", 512000);
 
 	/* AHDC KF tracks */
 	int nkftracks;
@@ -291,6 +293,7 @@ void convert(const char *hipoFile, bool do_mc)
 			trackpx[i] = tracks.getFloat("px", i);
 			trackpy[i] = tracks.getFloat("py", i);
 			trackpz[i] = tracks.getFloat("pz", i);
+			trackid[i] = tracks.getInt("trackid", i);
 		}
 
 		nrectracks = rec_tracks.getRows();
