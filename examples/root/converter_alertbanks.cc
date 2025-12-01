@@ -26,10 +26,9 @@
 #define maxhits        10000
 #define maxpreclusters  1000
 #define maxclusters     1000
-#define maxmctracks      100
-#define maxtracks        100
-#define maxkftracks      100
-#define maxahdcadc       500 // TODO: check this eventually!
+#define maxtracks       1000
+#define maxkftracks     1000
+#define maxahdcadc      1000
 #define maxrectracks    1000
 
 
@@ -84,22 +83,22 @@ void convert(const char *hipoFile, bool do_mc)
 	// if (iofeatures)
 	//	treeOutput->SetIOFeatures(features);
 
-	/* ATOF hits */
-	int   n_atofrecohits;
-	int   atof_hitid[maxhits];
-	int   atof_layer[maxhits];
-	int   atof_sector[maxhits];
-	int   atof_component[maxhits];
-	float atof_time[maxhits];
-	float atof_energy[maxhits];
+	/* AHDC hits */
+	int   n_ahdcrecohits;
+	int   ahdc_hitid[maxhits];
+	int   ahdc_trackid[maxhits];
+	int   ahdc_layer[maxhits];
+	int   ahdc_wire[maxhits];
+	int   ahdc_component[maxhits];
+	float ahdc_time[maxhits];
+	float ahdc_energy[maxhits];
 
-	treeOutput->Branch("n_atofrecohits",&n_atofrecohits,"n_atofrecohits/I",                512000);
-	treeOutput->Branch("atof_hitid",     &atof_hitid,     "atof_hitid[n_atofrecohits]/I",     512000);
-	treeOutput->Branch("atof_layer",     &atof_layer,     "atof_layer[n_atofrecohits]/I",     512000);
-	treeOutput->Branch("atof_sector",    &atof_sector,    "atof_sector[n_atofrecohits]/I",    512000);
-	treeOutput->Branch("atof_component", &atof_component, "atof_component[n_atofrecohits]/I", 512000);
-	treeOutput->Branch("atof_time",      &atof_time,      "atof_time[n_atofrecohits]/F",      512000);
-	treeOutput->Branch("atof_energy",    &atof_energy,    "atof_energy[n_atofrecohits]/F",    512000);
+	treeOutput->Branch("n_ahdcrecohits", &n_ahdcrecohits, "n_ahdcrecohits/I",                 512000);
+	treeOutput->Branch("ahdc_hitid",     &ahdc_hitid,     "ahdc_hitid[n_ahdcrecohits]/I",     512000);
+	treeOutput->Branch("ahdc_trackid",   &ahdc_trackid,   "ahdc_trackid[n_ahdcrecohits]/I",   512000);
+	treeOutput->Branch("ahdc_layer",     &ahdc_layer,     "ahdc_layer[n_ahdcrecohits]/I",     512000);
+	treeOutput->Branch("ahdc_wire",      &ahdc_wire,    "ahdc_wire[n_ahdcrecohits]/I",    512000);
+	treeOutput->Branch("ahdc_time",      &ahdc_time,      "ahdc_time[n_ahdcrecohits]/F",      512000);
 	
 	/* AHDC preclusters */
 	int npreclusters;
@@ -166,21 +165,21 @@ void convert(const char *hipoFile, bool do_mc)
 	treeOutput->Branch("ahdc_kftrack_sumadc", &kftracksumadc, "kftracksumadc[nkftracks]/F", 512000);
 
 	/* AHDC ADC information */
-	int   n_ahdcrows;
-	int   ahdc_sector[maxahdcadc];
-	int   ahdc_component[maxahdcadc];
-	int   ahdc_order[maxahdcadc];
-	int   ahdc_sumadc[maxahdcadc];
-	float ahdc_leadingEdgeTime[maxahdcadc];
-	float ahdc_timeOverThreshold[maxahdcadc];
+	int   n_ahdcadcrows;
+	int   ahdc_adc_sector[maxahdcadc];
+	int   ahdc_adc_component[maxahdcadc];
+	int   ahdc_adc_order[maxahdcadc];
+	int   ahdc_adc_sumadc[maxahdcadc];
+	float ahdc_adc_leadingEdgeTime[maxahdcadc];
+	float ahdc_adc_timeOverThreshold[maxahdcadc];
 
-	treeOutput->Branch("ahdc_nadcrows",          &n_ahdcrows,             "n_ahdcrows/I", 			       512000);
-	treeOutput->Branch("ahdc_sector",            &ahdc_sector,            "ahdc_sector[n_ahdcrows]/I",             512000);
-	treeOutput->Branch("ahdc_component",         &ahdc_component,         "ahdc_component[n_ahdcrows]/I",          512000);
-	treeOutput->Branch("ahdc_order",             &ahdc_order,             "ahdc_order[n_ahdcrows]/I",              512000);
-	treeOutput->Branch("ahdc_sumadc",            &ahdc_sumadc,            "ahdc_sumadc[n_ahdcrows]/I",             512000);
-	treeOutput->Branch("ahdc_leadingEdgeTime",   &ahdc_leadingEdgeTime,   "ahdc_leadingEdgeTime[n_ahdcrows]/F",    512000);
-	treeOutput->Branch("ahdc_timeOverThreshold", &ahdc_timeOverThreshold, "ahdc_timeOverThreshold[n_ahdcrows]/F",  512000);
+	treeOutput->Branch("ahdc_adc_nadcrows",          &n_ahdcadcrows,              "n_ahdcadcrows/I",                 	   512000);
+	treeOutput->Branch("ahdc_adc_sector",            &ahdc_adc_sector,            "ahdc_adc_sector[n_ahdcadcrows]/I",             512000);
+	treeOutput->Branch("ahdc_adc_component",         &ahdc_adc_component,         "ahdc_adc_component[n_ahdcadcrows]/I",          512000);
+	treeOutput->Branch("ahdc_adc_order",             &ahdc_adc_order,             "ahdc_adc_order[n_ahdcadcrows]/I",              512000);
+	treeOutput->Branch("ahdc_adc_sumadc",            &ahdc_adc_sumadc,            "ahdc_adc_sumadc[n_ahdcadcrows]/I",             512000);
+	treeOutput->Branch("ahdc_adc_leadingEdgeTime",   &ahdc_adc_leadingEdgeTime,   "ahdc_adc_leadingEdgeTime[n_ahdcadcrows]/F",    512000);
+	treeOutput->Branch("ahdc_adc_timeOverThreshold", &ahdc_adc_timeOverThreshold, "ahdc_adc_timeOverThreshold[n_ahdcadcrows]/F",  512000);
 
 	// Particle banks
 	int   nrectracks;
@@ -224,7 +223,7 @@ void convert(const char *hipoFile, bool do_mc)
 	writer.getDictionary().addSchema(factory.getSchema("REC::Particle")); // EFMC: Could this be an issue ????
 	writer.open(outputFileHipo);
 
-	hipo::bank hits(factory.getSchema("ATOF::hits"));
+	hipo::bank hits(factory.getSchema("AHDC::hits"));
 	hipo::bank preclusters(factory.getSchema("AHDC::preclusters"));
 	hipo::bank clusters(factory.getSchema("AHDC::clusters"));
 	hipo::bank tracks(factory.getSchema("AHDC::track"));
@@ -258,15 +257,14 @@ void convert(const char *hipoFile, bool do_mc)
 
 		readerBenchmark.pause();
 
-		n_atofrecohits = hits.getRows();
-		assert(n_atofrecohits < maxhits);
-		for (int i = 0; i < n_atofrecohits; i++) {
-			atof_hitid[i]     = hits.getInt("id", i);
-			atof_layer[i]     = hits.getInt("layer", i);
-			atof_sector[i]    = hits.getInt("sector", i);
-			atof_component[i] = hits.getInt("component", i);
-			atof_time[i]      = hits.getFloat("time", i);
-			atof_energy[i]    = hits.getFloat("energy", i);
+		n_ahdcrecohits = hits.getRows();
+		assert(n_ahdcrecohits < maxhits);
+		for (int i = 0; i < n_ahdcrecohits; i++) {
+			ahdc_hitid[i]     = hits.getInt("id", i);
+			ahdc_trackid[i]   = hits.getInt("trackid", i);
+			ahdc_layer[i]     = hits.getInt("layer", i);
+			ahdc_wire[i]      = hits.getInt("wire", i);
+			ahdc_time[i]      = hits.getFloat("time", i);
 		}
 
 		npreclusters = preclusters.getRows();
@@ -328,18 +326,18 @@ void convert(const char *hipoFile, bool do_mc)
 			kftracksumadc[i] = kftracks.getFloat("sum_adc", i);
 		}
 
-		n_ahdcrows = ahdc_adc.getRows();
-		assert(n_ahdcrows < maxahdcadc);
-		for (int i = 0; i < n_ahdcrows; i++) {
-			ahdc_sector[i]            = ahdc_adc.getInt("sector", i);
-			ahdc_component[i]         = ahdc_adc.getInt("component", i);
-			ahdc_order[i]             = ahdc_adc.getInt("order", i);
-			ahdc_sumadc[i]            = ahdc_adc.getInt("integral", i);
-			ahdc_leadingEdgeTime[i]   = ahdc_adc.getFloat("leadingEdgeTime", i);
-			ahdc_timeOverThreshold[i] = ahdc_adc.getFloat("timeOverThreshold", i);
+		n_ahdcadcrows = ahdc_adc.getRows();
+		assert(n_ahdcadcrows < maxahdcadc);
+		for (int i = 0; i < n_ahdcadcrows; i++) {
+			ahdc_adc_sector[i]            = ahdc_adc.getInt("sector", i);
+			ahdc_adc_component[i]         = ahdc_adc.getInt("component", i);
+			ahdc_adc_order[i]             = ahdc_adc.getInt("order", i);
+			ahdc_adc_sumadc[i]            = ahdc_adc.getInt("integral", i);
+			ahdc_adc_leadingEdgeTime[i]   = ahdc_adc.getFloat("leadingEdgeTime", i);
+			ahdc_adc_timeOverThreshold[i] = ahdc_adc.getFloat("timeOverThreshold", i);
 		}
                 
-                if (n_atofrecohits > 0) {
+                if (n_ahdcrecohits > 0) {
 			writerBenchmark.resume();
 			treeOutput->Fill();
 			writerBenchmark.pause();
@@ -349,6 +347,10 @@ void convert(const char *hipoFile, bool do_mc)
 			event.addStructure(hits);
 			event.addStructure(preclusters);
 			event.addStructure(clusters);
+			event.addStructure(tracks);
+			event.addStructure(kftracks);
+			event.addStructure(ahdc_adc);
+			event.addStructure(rec_tracks);
 			writer.addEvent(event);
 			writerHipoBenchmark.pause();
 		}
