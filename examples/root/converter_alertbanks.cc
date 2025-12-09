@@ -150,7 +150,7 @@ void convert(const char *hipoFile, bool do_mc)
 	float kftrackpz[maxkftracks];
 	float kftrackpath[maxkftracks];
 	float kftrackdedx[maxkftracks];
-	float kftracksumadc[maxkftracks];
+	int kftracksumadc[maxkftracks];
 
 	treeOutput->Branch("ahdc_nkftracks",      &nkftracks,     "nkftracks/I", 	        512000);
 	treeOutput->Branch("ahdc_kftrack_id",     &kftrack_id,    "kftrack_id[nkftracks]/I",    512000);
@@ -162,24 +162,28 @@ void convert(const char *hipoFile, bool do_mc)
 	treeOutput->Branch("ahdc_kftrack_pz",     &kftrackpz,     "kftrackpz[nkftracks]/F",     512000);
 	treeOutput->Branch("ahdc_kftrack_path",   &kftrackpath,   "kftrackpath[nkftracks]/F",   512000);
 	treeOutput->Branch("ahdc_kftrack_dedx",   &kftrackdedx,   "kftrackdedx[nkftracks]/F",   512000);
-	treeOutput->Branch("ahdc_kftrack_sumadc", &kftracksumadc, "kftracksumadc[nkftracks]/F", 512000);
+	treeOutput->Branch("ahdc_kftrack_sumadc", &kftracksumadc, "kftracksumadc[nkftracks]/I", 512000);
 
 	/* AHDC ADC information */
 	int   n_ahdcadcrows;
 	int   ahdc_adc_sector[maxahdcadc];
+	int   ahdc_adc_layer[maxahdcadc];
 	int   ahdc_adc_component[maxahdcadc];
 	int   ahdc_adc_order[maxahdcadc];
 	int   ahdc_adc_sumadc[maxahdcadc];
 	float ahdc_adc_leadingEdgeTime[maxahdcadc];
 	float ahdc_adc_timeOverThreshold[maxahdcadc];
+	int   ahdc_adc_wfType[maxahdcadc];
 
-	treeOutput->Branch("ahdc_adc_nadcrows",          &n_ahdcadcrows,              "n_ahdcadcrows/I",                 	   512000);
+	treeOutput->Branch("ahdc_adc_nadcrows",          &n_ahdcadcrows,              "n_ahdcadcrows/I",                 	      512000);
 	treeOutput->Branch("ahdc_adc_sector",            &ahdc_adc_sector,            "ahdc_adc_sector[n_ahdcadcrows]/I",             512000);
+	treeOutput->Branch("ahdc_adc_layer",             &ahdc_adc_layer,             "ahdc_adc_layer[n_ahdcadcrows]/I",             512000);
 	treeOutput->Branch("ahdc_adc_component",         &ahdc_adc_component,         "ahdc_adc_component[n_ahdcadcrows]/I",          512000);
 	treeOutput->Branch("ahdc_adc_order",             &ahdc_adc_order,             "ahdc_adc_order[n_ahdcadcrows]/I",              512000);
 	treeOutput->Branch("ahdc_adc_sumadc",            &ahdc_adc_sumadc,            "ahdc_adc_sumadc[n_ahdcadcrows]/I",             512000);
 	treeOutput->Branch("ahdc_adc_leadingEdgeTime",   &ahdc_adc_leadingEdgeTime,   "ahdc_adc_leadingEdgeTime[n_ahdcadcrows]/F",    512000);
 	treeOutput->Branch("ahdc_adc_timeOverThreshold", &ahdc_adc_timeOverThreshold, "ahdc_adc_timeOverThreshold[n_ahdcadcrows]/F",  512000);
+	treeOutput->Branch("ahdc_adc_wfType",            &ahdc_adc_wfType,            "ahdc_adc_wfType[n_ahdcadcrows]/I",             512000);
 
 	// Particle banks
 	int   nrectracks;
@@ -323,14 +327,16 @@ void convert(const char *hipoFile, bool do_mc)
 			kftrackpz[i]     = kftracks.getFloat("pz", i);
 			kftrackpath[i]   = kftracks.getFloat("path", i);
 			kftrackdedx[i]   = kftracks.getFloat("dEdx", i);
-			kftracksumadc[i] = kftracks.getFloat("sum_adc", i);
+			kftracksumadc[i] = kftracks.getInt("sum_adc", i);
 		}
 
 		n_ahdcadcrows = ahdc_adc.getRows();
 		assert(n_ahdcadcrows < maxahdcadc);
 		for (int i = 0; i < n_ahdcadcrows; i++) {
 			ahdc_adc_sector[i]            = ahdc_adc.getInt("sector", i);
+			ahdc_adc_layer[i]             = ahdc_adc.getInt("layer", i);
 			ahdc_adc_component[i]         = ahdc_adc.getInt("component", i);
+			ahdc_adc_wfType[i]            = ahdc_adc.getInt("wfType", i);
 			ahdc_adc_order[i]             = ahdc_adc.getInt("order", i);
 			ahdc_adc_sumadc[i]            = ahdc_adc.getInt("integral", i);
 			ahdc_adc_leadingEdgeTime[i]   = ahdc_adc.getFloat("leadingEdgeTime", i);
