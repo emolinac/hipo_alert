@@ -88,17 +88,19 @@ void convert(const char *hipoFile, bool do_mc)
 	int   ahdc_hitid[maxhits];
 	int   ahdc_trackid[maxhits];
 	int   ahdc_layer[maxhits];
+	int   ahdc_superlayer[maxhits];
 	int   ahdc_wire[maxhits];
 	int   ahdc_component[maxhits];
 	float ahdc_time[maxhits];
 	float ahdc_energy[maxhits];
 
-	treeOutput->Branch("n_ahdcrecohits", &n_ahdcrecohits, "n_ahdcrecohits/I",                 512000);
-	treeOutput->Branch("ahdc_hitid",     &ahdc_hitid,     "ahdc_hitid[n_ahdcrecohits]/I",     512000);
-	treeOutput->Branch("ahdc_trackid",   &ahdc_trackid,   "ahdc_trackid[n_ahdcrecohits]/I",   512000);
-	treeOutput->Branch("ahdc_layer",     &ahdc_layer,     "ahdc_layer[n_ahdcrecohits]/I",     512000);
-	treeOutput->Branch("ahdc_wire",      &ahdc_wire,    "ahdc_wire[n_ahdcrecohits]/I",    512000);
-	treeOutput->Branch("ahdc_time",      &ahdc_time,      "ahdc_time[n_ahdcrecohits]/F",      512000);
+	treeOutput->Branch("n_ahdcrecohits", &n_ahdcrecohits, "n_ahdcrecohits/I",                  512000);
+	treeOutput->Branch("ahdc_hitid",     &ahdc_hitid,     "ahdc_hitid[n_ahdcrecohits]/I",      512000);
+	treeOutput->Branch("ahdc_trackid",   &ahdc_trackid,   "ahdc_trackid[n_ahdcrecohits]/I",    512000);
+	treeOutput->Branch("ahdc_layer",     &ahdc_layer,     "ahdc_layer[n_ahdcrecohits]/I",      512000);
+	treeOutput->Branch("ahdc_superlayer",&ahdc_superlayer,"ahdc_superlayer[n_ahdcrecohits]/I", 512000);
+	treeOutput->Branch("ahdc_wire",      &ahdc_wire,      "ahdc_wire[n_ahdcrecohits]/I",       512000);
+	treeOutput->Branch("ahdc_time",      &ahdc_time,      "ahdc_time[n_ahdcrecohits]/F",       512000);
 	
 	/* AHDC preclusters */
 	int npreclusters;
@@ -267,6 +269,7 @@ void convert(const char *hipoFile, bool do_mc)
 			ahdc_hitid[i]     = hits.getInt("id", i);
 			ahdc_trackid[i]   = hits.getInt("trackid", i);
 			ahdc_layer[i]     = hits.getInt("layer", i);
+			ahdc_superlayer[i]= hits.getInt("superlayer", i);
 			ahdc_wire[i]      = hits.getInt("wire", i);
 			ahdc_time[i]      = hits.getFloat("time", i);
 		}

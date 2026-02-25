@@ -1,13 +1,18 @@
 #!/bin/bash
 
+# This directory should contain the hipo files that need conversion
 dir="/lustre24/expphy/volatile/clas12/rg-l/production/p0v6_calib/calib/recon/022994"
 
-# ls -1 ${dir} > files.txt
+file_name="files.txt"
+ls -1 ${dir} > ${file_name}
 
-for i in $(cat files.txt); do
-        cp ${dir}/${i} ../../../service-work-2025/022994/
+Temporary folder that will contain the hipo file being converted
+temp_hipo_file_directory="../../../service-work-2025/022994/"
 
-        ./converter_alertbanks.exe ../../../service-work-2025/022994/${i} 0
+for i in $(cat ${file_name}); do
+        cp ${dir}/${i} ${temp_hipo_file_directory}
 
-        rm ../../../service-work-2025/022994/*.hipo
+        ./converter_alertbanks.exe ${temp_hipo_file_directory}${i} 0
+
+        rm ${temp_hipo_file_directory}*.hipo
 done
